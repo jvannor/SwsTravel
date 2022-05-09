@@ -6,18 +6,36 @@ on:
 jobs:
 
   build_and_deploy_job:
-    runs-on: ubuntu_latest
+    runs-on: ubuntu-latest
     name: Build and Deploy Job
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout Source Code
+        uses: actions/checkout@v2
         with:
           submodules: true
+
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '6.0.x'
-      - name: Deploy Database
+
+      - name: Build and Deploy Database
         working-directory: ./database/deploy
         env: 
           ConnectionString: ${{ secrets.AZURE_SQL_CONNECTION_STRING }}
         run: dotnet build && dotnet run
+
+      - name: Build API
+        shell: bash
+        run: |
+          pushd './api'
+          dotnet build --configuration Release --output ./output
+          popd
+
+      - name: Deploy API
+        uses: Azure/functions-action@v1
+        id: fa
+        with:
+          app-name: ''
+          package: './api/output'
+          publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
