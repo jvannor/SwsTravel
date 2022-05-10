@@ -25,9 +25,9 @@ namespace api
                                 sqlServerOptionsAction: sqlOptions =>
                                 {
                                     sqlOptions.EnableRetryOnFailure(
-                                        maxRetryCount: 10,
-                                        maxRetryDelay: TimeSpan.FromSeconds(120),
-                                        errorNumbersToAdd: null);
+                                        maxRetryCount: 5,
+                                        maxRetryDelay: TimeSpan.FromSeconds(30),
+                                        errorNumbersToAdd: new[] {-2});
                                 }
                             )
                     );
