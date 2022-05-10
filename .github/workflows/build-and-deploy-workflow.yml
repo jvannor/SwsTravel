@@ -46,6 +46,7 @@ jobs:
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
           action: "upload"
+          app_build_command: "npm run build"
           app_location: "./client"
           api_location: ""
-          output_location: "dist"
+          output_location: "dist/client"
