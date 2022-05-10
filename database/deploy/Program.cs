@@ -2,6 +2,7 @@
 using Microsoft.Data.SqlClient;
 using DbUp;
 using DotNetEnv;
+using Polly;
 
 // This will load the content of .env file and create related environment variables
 DotNetEnv.Env.Load();
@@ -13,9 +14,17 @@ var csb = new SqlConnectionStringBuilder(connectionString);
 Console.WriteLine($"Deploying database: {csb.InitialCatalog}");
 
 Console.WriteLine("Testing connection...");
-var conn = new SqlConnection(csb.ToString());
-conn.Open();
-conn.Close();
+
+var policy = Policy.Handle<SqlException>()
+    .WaitAndRetry(3, retryAttempt =>
+        TimeSpan.FromSeconds(Math.Pow(2, retryAttempt))
+    );
+
+policy.Execute(() => {
+    var conn = new SqlConnection(csb.ToString());
+    conn.Open();
+    conn.Close();
+});
 
 Console.WriteLine("Starting deployment...");
 var dbup = DeployChanges.To

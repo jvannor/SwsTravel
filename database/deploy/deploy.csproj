@@ -11,6 +11,7 @@
     <PackageReference Include="DbUp" Version="4.6.0" />
     <PackageReference Include="DotNetEnv" Version="2.3.0" />
     <PackageReference Include="Microsoft.data.sqlclient" Version="4.1.0" />
+    <PackageReference Include="polly" Version="7.2.3" />
   </ItemGroup>
 
 </Project>
