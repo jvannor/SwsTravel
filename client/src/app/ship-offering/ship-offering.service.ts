@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { catchError, Observable, tap, throwError } from "rxjs";
+import { catchError, Observable, tap, throwError, timeout } from "rxjs";
 import { IShipOffering } from "./ship-offering";
 
 @Injectable({
@@ -13,6 +13,7 @@ export class ShipOfferingService {
 
     getShipOfferings() : Observable<IShipOffering[]> {
         return this.http.get<IShipOffering[]>(this.shipOfferingServiceUrl).pipe(
+            timeout(180000),
             tap(data => console.log('All', JSON.stringify(data))),
             catchError(this.handleError)
         );
