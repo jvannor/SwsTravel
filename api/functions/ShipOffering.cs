@@ -162,7 +162,7 @@ namespace api.functions
 
         private IEnumerable<models.ShipOffering> GetMany()
         {
-            var offerings = _context.ShipOfferings
+            return _context.ShipOfferings
                 .OrderBy(so => so.ProductId)
                 .Select(so => new models.ShipOffering() 
                 {
@@ -179,8 +179,6 @@ namespace api.functions
                         Name = so.Product.FacilityIdgoingToNavigation.FacilityName
                     }
                 });
-
-            return offerings;
         }
 
         private readonly SwsTravelContext _context;
