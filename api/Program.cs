@@ -19,17 +19,10 @@ namespace api
                 .ConfigureServices(container => 
                 {
                     container.AddDbContext<SwsTravelContext>(
-                        options => 
-                            options.UseSqlServer(
-                                Environment.GetEnvironmentVariable("SwsTravelConnection"),
-                                sqlServerOptionsAction: sqlOptions =>
-                                {
-                                    sqlOptions.EnableRetryOnFailure(
-                                        maxRetryCount: 5,
-                                        maxRetryDelay: TimeSpan.FromSeconds(30),
-                                        errorNumbersToAdd: new[] {-2});
-                                }
-                            )
+                        options => options.UseSqlServer(
+                            Environment.GetEnvironmentVariable("SwsTravelConnection"),
+                            providerOptions => providerOptions.EnableRetryOnFailure()
+                        )
                     );
                 })
                 .Build();
